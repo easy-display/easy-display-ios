@@ -54,20 +54,33 @@ class ViewController: UIViewController, WKUIDelegate {
     var manager : SocketManager?
     func connectSocket(){
         
-        manager = SocketManager(socketURL: URL(string: "http://localhost:8999")!, config: [.log(true), .compress])
+        let host = "localhost:8999"
+        let prot = "http"
+        let namespace = "/mobile/0.1"
+        let userId = 99
+        let token = "Az_678987"
+        let connectParams : [String : Any] = [
+            "client_type" : "mobile",
+            "user_id" : userId  ,
+            "token" : token ]
+        
+        let url = URL(string: "\(prot)://\(host)")!
+
+        manager = SocketManager(socketURL: url, config: [.log(true),  .compress, .connectParams(connectParams)])
         guard let manager = manager else {
             return
         }
-        let socket = manager.defaultSocket
+        let socket = manager.socket(forNamespace: namespace)
         
         socket.on(clientEvent: .connect) {data, ack in
             print("socket connected")
         }
         
-        socket.on("event_to_client")  {data, ack in
+        socket.on("event_desktop_to_mobile")  {data, ack in
             print("event_to_client ....",data)
-            socket.emit("event_to_server", ["asdf" : "asdf"])
+//            socket.emit("event_to_server", ["asdf" : "asdf"])
         }
+        /*
         socket.on("currentAmount") {data, ack in
             guard let cur = data[0] as? Double else { return }
             
@@ -76,7 +89,7 @@ class ViewController: UIViewController, WKUIDelegate {
             }
             
             ack.with("Got your currentAmount", "dude")
-        }
+        }*/
         
         socket.connect()
     }
