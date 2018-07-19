@@ -51,6 +51,15 @@ class ViewController: UIViewController, WKUIDelegate {
         
     }
 
+    func runMessages(messages: [Message]){
+        messages.forEach { (msg) in
+            let urlStr = msg.data
+            let url = URL(string: urlStr)!
+            let req = URLRequest(url: url)
+            webView?.load(req)
+        }
+    }
+    
     var manager : SocketManager?
     func connectSocket(){
         
@@ -77,8 +86,32 @@ class ViewController: UIViewController, WKUIDelegate {
         }
         
         socket.on("event_desktop_to_mobile")  {data, ack in
-            print("event_to_client ....",data)
-//            socket.emit("event_to_server", ["asdf" : "asdf"])
+//            print("event_desktop_to_mobile:\n\n", data[0])
+            
+            guard let dict = data[0] as? Dictionary<String, Any> else {
+                return
+            }
+            
+            print("event_desktop_to_mobile:\n\n", type(of: dict))
+            
+            
+            guard let arrayOfDict = dict["messages"] as? [Dictionary<String, Any>] else {
+                return
+            }
+            
+            print("event_desktop_to_mobile:\n\n", type(of: arrayOfDict))
+            
+            
+            let msgs : [Message] = arrayOfDict.compactMap {
+
+                if let name = $0["name"] as? String, let data = $0["data"] as? String {
+                    return Message(name: name, data: data)
+                }
+                return nil
+            }
+            print("msgs:\n\n", msgs)
+            self.runMessages(messages: msgs)
+
         }
         /*
         socket.on("currentAmount") {data, ack in
@@ -95,4 +128,17 @@ class ViewController: UIViewController, WKUIDelegate {
     }
     
 }
+
+struct Message : Codable {
+    
+    let name: String
+    let data: String
+    
+    init( name: String, data: String) {
+        self.data = data
+        self.name = name
+    }
+    
+}
+
 
