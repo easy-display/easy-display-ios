@@ -54,6 +54,7 @@ class ViewController: UIViewController, WKUIDelegate {
         let myURL = URL(string: "https://www.google.com/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
+        webView.isUserInteractionEnabled = false
         
     }
 
@@ -73,7 +74,10 @@ class ViewController: UIViewController, WKUIDelegate {
                 webView?.load(req)
 
 
+            case .Scroll:
+                webView?.scrollView.setContentOffset(CGPoint(x: 100, y: 100), animated: true)
             }
+            
 
         }
     }
@@ -172,6 +176,7 @@ enum MessageName: String, Codable
 {
     case OpenURL = "open_url"
     case EvaluateJS = "evaluate_js"
+    case Scroll = "scroll"
 }
 
 struct Message : Codable {
