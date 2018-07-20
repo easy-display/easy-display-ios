@@ -15,6 +15,9 @@ class ViewController: UIViewController, WKUIDelegate {
 
     var webView: WKWebView?
     
+    @IBOutlet weak var viewContainer: UIView?
+    @IBOutlet weak var buttonConnection: UIButton?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadWebView()
@@ -36,16 +39,19 @@ class ViewController: UIViewController, WKUIDelegate {
         guard let webView = webView else {
             return
         }
+        guard let viewContainer = viewContainer else {
+            return
+        }
         webView.uiDelegate = self
-        view.addSubview(webView)
+        viewContainer.addSubview(webView)
         webView.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(view).offset(100)
-            make.left.equalTo(view)
-            make.bottom.equalTo(view)
-            make.right.equalTo(view)
+            make.top.equalTo(viewContainer)
+            make.left.equalTo(viewContainer)
+            make.bottom.equalTo(viewContainer)
+            make.right.equalTo(viewContainer)
         }
         
-        let myURL = URL(string: "https://devdocs.io/")
+        let myURL = URL(string: "https://www.google.com/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
@@ -53,15 +59,29 @@ class ViewController: UIViewController, WKUIDelegate {
 
     func runMessages(messages: [Message]){
         messages.forEach { (msg) in
-            let urlStr = msg.data
-            let url = URL(string: urlStr)!
-            let req = URLRequest(url: url)
-            webView?.load(req)
+            switch msg.name {
+            case .EvaluateJS:
+                let js = msg.data
+                webView?.evaluateJavaScript(js, completionHandler: { (obj : Any?, error: Error? ) in
+                    print("js: " , js)
+                    print("error: " , error)
+                })
+            case .OpenURL:
+                let urlStr = msg.data
+                let url = URL(string: urlStr)!
+                let req = URLRequest(url: url)
+                webView?.load(req)
+
+
+            }
+
         }
     }
     
     var manager : SocketManager?
     func connectSocket(){
+        
+        self.buttonConnection?.setTitle("Connecting ...", for: .normal)
         
         let host = "localhost:8999"
         let prot = "http"
@@ -82,9 +102,27 @@ class ViewController: UIViewController, WKUIDelegate {
         let socket = manager.socket(forNamespace: namespace)
         
         socket.on(clientEvent: .connect) {data, ack in
-            print("socket connected")
+            print("socket connected!")
+            DispatchQueue.main.async{
+                self.buttonConnection?.setTitle("Connected", for: .normal)
+            }
         }
         
+        socket.on(clientEvent: .disconnect) {data, ack in
+            print("socket disconnected!")
+            DispatchQueue.main.async{
+                self.buttonConnection?.setTitle("Disconnected", for: .normal)
+            }
+        }
+        
+        
+        socket.on(clientEvent: .statusChange) {data, ack in
+            print("socket disconnected!")
+            DispatchQueue.main.async{
+                self.buttonConnection?.setTitle(" ????? ", for: .normal)
+            }
+        }
+
         socket.on("event_desktop_to_mobile")  {data, ack in
 //            print("event_desktop_to_mobile:\n\n", data[0])
             
@@ -129,14 +167,25 @@ class ViewController: UIViewController, WKUIDelegate {
     
 }
 
+
+enum MessageName: String, Codable
+{
+    case OpenURL = "open_url"
+    case EvaluateJS = "evaluate_js"
+}
+
 struct Message : Codable {
     
-    let name: String
+    let name: MessageName
     let data: String
     
     init( name: String, data: String) {
         self.data = data
-        self.name = name
+        var n = MessageName.OpenURL
+        if let n2 = MessageName(rawValue: name) {
+            n = n2
+        }
+        self.name = n
     }
     
 }

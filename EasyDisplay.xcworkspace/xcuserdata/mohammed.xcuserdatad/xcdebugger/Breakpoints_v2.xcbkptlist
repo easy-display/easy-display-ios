@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EasyDisplay/ViewController.swift"
-            timestampString = "553730059.311024"
+            timestampString = "553789526.229452"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "ibActionDelme()"
             landmarkType = "7">
          </BreakpointContent>
