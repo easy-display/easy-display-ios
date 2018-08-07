@@ -11,6 +11,11 @@ import WebKit
 import SnapKit
 import SocketIO
 
+let EVENT_MOBILE_TO_DESKTOP = "event-mobile-to-desktop"
+let EVENT_MOBILE_TO_SERVER = "event-mobile-to-server"
+let EVENT_DESKTOP_TO_MOBILE = "event-desktop-to-mobile"
+
+
 class WebViewVC: UIViewController, WKUIDelegate {
 
     var webView: WKWebView?
@@ -63,7 +68,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             return
         }
         let socket = manager.defaultSocket
-        socket.emit("event_to_server", ["asdf" : "asdf"])
+        socket.emit(EVENT_MOBILE_TO_SERVER , ["asdf" : "asdf"])
     }
     
     func setupWebView(){
@@ -85,7 +90,8 @@ class WebViewVC: UIViewController, WKUIDelegate {
             make.right.equalTo(viewContainer)
         }
         
-        let myURL = URL(string: "https://www.google.com/")
+        //let myURL = URL(string: "https://www.google.com/")
+        let myURL = URL(string: "http://sensu.devops.arabiaweather.com/#/events")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         webView.isUserInteractionEnabled = false
@@ -181,7 +187,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             print("socket connected!")
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle("Connected", for: .normal)
-                socket.emit("event_mobile_to_desktop", ["name" : "connection_success"])
+                socket.emit( EVENT_MOBILE_TO_DESKTOP , ["name" : "connection-success"])
             }
         }
         
@@ -211,21 +217,21 @@ class WebViewVC: UIViewController, WKUIDelegate {
             }
         }
 
-        socket.on("event_desktop_to_mobile")  {data, ack in
-            print("event_desktop_to_mobile:\n\n", data)
+        socket.on(EVENT_DESKTOP_TO_MOBILE)  {data, ack in
+            print("\(EVENT_DESKTOP_TO_MOBILE) :\n\n", data)
             
             guard let dict = data[0] as? Dictionary<String, Any> else {
                 return
             }
             
-            print("event_desktop_to_mobile:\n\n", type(of: dict))
+            print("\(EVENT_DESKTOP_TO_MOBILE):\n\n", type(of: dict))
             
             
             guard let arrayOfDict = dict["messages"] as? [Dictionary<String, Any>] else {
                 return
             }
             
-            print("event_desktop_to_mobile:\n\n", type(of: arrayOfDict))
+            print("\(EVENT_DESKTOP_TO_MOBILE):\n\n", type(of: arrayOfDict))
             
             
             let msgs : [Message] = arrayOfDict.compactMap {
