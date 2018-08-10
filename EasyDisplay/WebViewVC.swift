@@ -14,6 +14,7 @@ import SocketIO
 let EVENT_MOBILE_TO_DESKTOP = "event-mobile-to-desktop"
 let EVENT_MOBILE_TO_SERVER = "event-mobile-to-server"
 let EVENT_DESKTOP_TO_MOBILE = "event-desktop-to-mobile"
+let MOBILE_CONNECTION_SUCCESS = "mobile-connection-success"
 
 
 class WebViewVC: UIViewController, WKUIDelegate {
@@ -151,9 +152,10 @@ class WebViewVC: UIViewController, WKUIDelegate {
             case .Reload:
                 webView?.reload()
                 
+            default:
+                print("unhandled \(msg.name) !!")
+                
             }
-            
-            
             
 
         }
@@ -173,7 +175,8 @@ class WebViewVC: UIViewController, WKUIDelegate {
         
         let connectParams : [String : Any] = [
             "client_type" : "mobile" ,
-            "token" : con.token ]
+            "token" : con.token
+        ]
         
         let url = URL(string: "\(con.scheme)://\(con.host)")!
 
@@ -187,7 +190,12 @@ class WebViewVC: UIViewController, WKUIDelegate {
             print("socket connected!")
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle("Connected", for: .normal)
-                socket.emit( EVENT_MOBILE_TO_DESKTOP , ["name" : "connection-success"])
+                let msgs : [Message] = [Message(name: MOBILE_CONNECTION_SUCCESS, dataString: "", dataNumber: 0)];
+                let encoder = JSONEncoder()
+                let d = try! encoder.encode(msgs)
+                let json = String(data: d, encoding: .utf8)!
+//                print( json )
+                socket.emit( EVENT_MOBILE_TO_DESKTOP , json)
             }
         }
         
@@ -268,10 +276,15 @@ class WebViewVC: UIViewController, WKUIDelegate {
 
 enum MessageName: String, Codable
 {
+    case Unkown = "unknown"
     case OpenURL = "open_url"
     case EvaluateJS = "evaluate_js"
     case Scroll = "scroll"
     case Reload = "reload"
+    case MobileConnectionLost = "mobile-connection-lost"
+    case MobileConnectionSuccess = "mobile-connection-success"
+    case DesktopConnectionLost = "desktop-connection-lost"
+    case DesktopConnectionSuccess = "desktop-connection-success"
 }
 
 struct Message : Codable {
@@ -283,7 +296,7 @@ struct Message : Codable {
     init( name: String, dataString: String, dataNumber: Double) {
         self.dataString = dataString
         self.dataNumber = dataNumber
-        var n = MessageName.OpenURL
+        var n = MessageName.Unkown
         if let n2 = MessageName(rawValue: name) {
             n = n2
         }
