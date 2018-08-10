@@ -14,6 +14,7 @@ import SocketIO
 let EVENT_MOBILE_TO_DESKTOP = "event-mobile-to-desktop"
 let EVENT_MOBILE_TO_SERVER = "event-mobile-to-server"
 let EVENT_DESKTOP_TO_MOBILE = "event-desktop-to-mobile"
+let EVENT_SERVER_TO_MOBILE = "event-server-to-mobile"
 let MOBILE_CONNECTION_SUCCESS = "mobile-connection-success"
 
 
@@ -103,6 +104,11 @@ class WebViewVC: UIViewController, WKUIDelegate {
         messages.forEach { (msg) in
             switch msg.name {
             
+            case .DesktopConnectionLost:
+                
+                self.manager?.disconnect()
+                self.loadCamera()
+                
             case .EvaluateJS:
                 let js = msg.dataString
                 webView?.evaluateJavaScript(js, completionHandler: { (obj : Any?, error: Error? ) in
@@ -160,6 +166,29 @@ class WebViewVC: UIViewController, WKUIDelegate {
 
         }
     }
+    
+    
+    func extractMessages(data: [Any]) -> [Message]?
+    {
+        /*guard let dict = data[0] as? Dictionary<String, Any> else {
+            return nil
+        }*/
+        guard let arrayOfDict = data[0] as? [Dictionary<String, Any>] else {
+            return nil
+        }
+        let msgs : [Message] = arrayOfDict.compactMap {
+            
+            if let name = $0["name"] as? String,
+                let str = $0["dataString"] as? String,
+                let num = $0["dataNumber"] as? Double
+            {
+                return Message(name: name, dataString: str, dataNumber: num)
+            }
+            return nil
+        }
+        return msgs
+    }
+    
     
     var manager : SocketManager?
     func connectSocket(connection: Connection){
@@ -225,47 +254,24 @@ class WebViewVC: UIViewController, WKUIDelegate {
             }
         }
 
+        socket.on(EVENT_SERVER_TO_MOBILE) {data, ack in
+            print("\(EVENT_SERVER_TO_MOBILE) :\n\n", data)
+            
+            if let msgs = self.extractMessages(data: data){
+                self.runMessages(messages: msgs)
+            }
+
+        }
+        
         socket.on(EVENT_DESKTOP_TO_MOBILE)  {data, ack in
             print("\(EVENT_DESKTOP_TO_MOBILE) :\n\n", data)
             
-            guard let dict = data[0] as? Dictionary<String, Any> else {
-                return
+            if let msgs = self.extractMessages(data: data){
+                self.runMessages(messages: msgs)
             }
-            
-            print("\(EVENT_DESKTOP_TO_MOBILE):\n\n", type(of: dict))
-            
-            
-            guard let arrayOfDict = dict["messages"] as? [Dictionary<String, Any>] else {
-                return
-            }
-            
-            print("\(EVENT_DESKTOP_TO_MOBILE):\n\n", type(of: arrayOfDict))
-            
-            
-            let msgs : [Message] = arrayOfDict.compactMap {
-
-                if let name = $0["name"] as? String,
-                    let str = $0["dataString"] as? String,
-                    let num = $0["dataNumber"] as? Double
-                {
-                    return Message(name: name, dataString: str, dataNumber: num)
-                }
-                return nil
-            }
-            print("msgs:\n\n", msgs)
-            self.runMessages(messages: msgs)
 
         }
-        /*
-        socket.on("currentAmount") {data, ack in
-            guard let cur = data[0] as? Double else { return }
-            
-            socket.emitWithAck("canUpdate", cur).timingOut(after: 0) {data in
-                socket.emit("update", ["amount": cur + 2.50])
-            }
-            
-            ack.with("Got your currentAmount", "dude")
-        }*/
+        
         
         socket.connect()
     }
