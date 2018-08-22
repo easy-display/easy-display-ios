@@ -11,11 +11,13 @@ import WebKit
 import SnapKit
 import SocketIO
 
+
 let EVENT_MOBILE_TO_DESKTOP = "event-mobile-to-desktop"
 let EVENT_MOBILE_TO_SERVER = "event-mobile-to-server"
 let EVENT_DESKTOP_TO_MOBILE = "event-desktop-to-mobile"
 let EVENT_SERVER_TO_MOBILE = "event-server-to-mobile"
 let MOBILE_CONNECTION_SUCCESS = "mobile-connection-success"
+
 
 
 class WebViewVC: UIViewController, WKUIDelegate {
@@ -30,10 +32,49 @@ class WebViewVC: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillResignActive, object: nil, queue: nil) { (notif) in
+            self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileToBackground)
+        }
+
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { (notif) in
+            self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileIsForeground)
+        }
+
+        
+    }
+    
+    func emitMessage(to: String ,name: MessageName, dataString: String = "" , dataNumber: Double = 0){
+        guard let socket = socket else { return }
+        let msg = messageWith(name: name, dataString: dataString, dataNumber: dataNumber)
+        socket.emit( to , msg )
+    }
+    
+    func messageWith( name: MessageName, dataString: String = "" , dataNumber: Double = 0) -> String {
+        let msgs : [Message] = [Message(name: name, dataString: dataString, dataNumber: dataNumber)]
+        let encoder = JSONEncoder()
+        let d = try! encoder.encode(msgs)
+        let json = String(data: d, encoding: .utf8)!
+//                print( json )
+        return json
     }
     
     override func viewDidAppear(_ animated: Bool) {
         suggestShowingCameraIfNeeded()
+    }
+    
+    @IBAction func ibActionConnectionButton(_ sender: UIButton) {
+
+        if (self.socket?.status == SocketIOStatus.connected){
+            let alert = UIAlertController(title: "App is Connected", message: "Disconnect?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+                self.manager?.disconnect()
+                self.loadCamera()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true)
+        }
+        
     }
     
     func suggestShowingCameraIfNeeded(){
@@ -43,7 +84,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
                self.loadCamera()
             }))
             present(alert, animated: true) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     alert.dismiss(animated: true, completion: {
                         self.loadCamera()
                     })
@@ -102,18 +143,25 @@ class WebViewVC: UIViewController, WKUIDelegate {
 
     func runMessages(messages: [Message]){
         messages.forEach { (msg) in
+            
+            print("runMessages message: \(msg.name)")
+            
             switch msg.name {
             
-            case .DesktopConnectionLost:
-                
+            case .NewSyncRequired:
                 self.manager?.disconnect()
                 self.loadCamera()
                 
+            case .DesktopConnectionLost:
+                print("DesktopConnectionLost")
+    
             case .EvaluateJS:
                 let js = msg.dataString
                 webView?.evaluateJavaScript(js, completionHandler: { (obj : Any?, error: Error? ) in
-                    print("js: " , js)
-                    print("error: " , error)
+                    print("EvaluateJS js: " , js)
+                    if let err = error {
+                        print("EvaluateJS error: " , err.localizedDescription)
+                    }
                 })
             
             case .OpenURL:
@@ -182,7 +230,10 @@ class WebViewVC: UIViewController, WKUIDelegate {
                 let str = $0["dataString"] as? String,
                 let num = $0["dataNumber"] as? Double
             {
-                return Message(name: name, dataString: str, dataNumber: num)
+                guard let messageName = MessageName( rawValue: name) else {
+                    return nil
+                }
+                return Message(name: messageName, dataString: str, dataNumber: num)
             }
             return nil
         }
@@ -191,6 +242,8 @@ class WebViewVC: UIViewController, WKUIDelegate {
     
     
     var manager : SocketManager?
+    var socket: SocketIOClient?
+    
     func connectSocket(connection: Connection){
         
         self.connection = connection
@@ -199,6 +252,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             return
         }
         self.buttonConnection?.setTitle("Connecting ...", for: .normal)
+        self.buttonConnection?.setTitleColor(UIColor.yellow, for: .normal)
         
         let namespace = "/mobile/\(con.version)"
         
@@ -213,13 +267,17 @@ class WebViewVC: UIViewController, WKUIDelegate {
         guard let manager = manager else {
             return
         }
-        let socket = manager.socket(forNamespace: namespace)
+        socket = manager.socket(forNamespace: namespace)
+        guard let socket = socket else {
+            return
+        }
         
         socket.on(clientEvent: .connect) {data, ack in
             print("socket connected!")
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle("Connected", for: .normal)
-                let msgs : [Message] = [Message(name: MOBILE_CONNECTION_SUCCESS, dataString: "", dataNumber: 0)];
+                self.buttonConnection?.setTitleColor(UIColor.green, for: .normal)
+                let msgs : [Message] = [Message(name: .MobileConnectionSuccess, dataString: "", dataNumber: 0)];
                 let encoder = JSONEncoder()
                 let d = try! encoder.encode(msgs)
                 let json = String(data: d, encoding: .utf8)!
@@ -243,6 +301,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             print("socket disconnected!")
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle("Disconnected", for: .normal)
+                self.buttonConnection?.setTitleColor(UIColor.red, for: .normal)
             }
         }
         
@@ -251,6 +310,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             print("socket disconnected!")
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle(" ????? ", for: .normal)
+                self.buttonConnection?.setTitleColor(UIColor.gray, for: .normal)
             }
         }
 
@@ -291,6 +351,9 @@ enum MessageName: String, Codable
     case MobileConnectionSuccess = "mobile-connection-success"
     case DesktopConnectionLost = "desktop-connection-lost"
     case DesktopConnectionSuccess = "desktop-connection-success"
+    case MobileToBackground = "mobile-to-backgound"
+    case MobileIsForeground = "mobile-is-foreground"
+    case NewSyncRequired = "new-sync-required"
 }
 
 struct Message : Codable {
@@ -299,14 +362,15 @@ struct Message : Codable {
     let dataString: String
     let dataNumber: Double
     
-    init( name: String, dataString: String, dataNumber: Double) {
+    init( name: MessageName, dataString: String, dataNumber: Double) {
         self.dataString = dataString
         self.dataNumber = dataNumber
-        var n = MessageName.Unkown
-        if let n2 = MessageName(rawValue: name) {
-            n = n2
-        }
-        self.name = n
+        self.name = name
+//        var n = MessageName.Unkown
+//        if let n2 = MessageName(rawValue: name) {
+//            n = n2
+//        }
+//        self.name = n
     }
     
 }
