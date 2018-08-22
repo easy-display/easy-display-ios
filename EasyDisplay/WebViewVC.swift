@@ -208,8 +208,8 @@ class WebViewVC: UIViewController, WKUIDelegate {
         ]
         
         let url = URL(string: "\(con.scheme)://\(con.host)")!
-
-        manager = SocketManager(socketURL: url, config: [.log(true),  .compress, .connectParams(connectParams)])
+        let isSecure = con.scheme.rawValue == "https"
+        manager = SocketManager(socketURL: url, config: [ .log(true), .secure(isSecure) , .compress, .connectParams(connectParams)])
         guard let manager = manager else {
             return
         }
