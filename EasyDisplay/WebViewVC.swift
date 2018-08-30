@@ -18,6 +18,9 @@ let EVENT_DESKTOP_TO_MOBILE = "event-desktop-to-mobile"
 let EVENT_SERVER_TO_MOBILE = "event-server-to-mobile"
 let MOBILE_CONNECTION_SUCCESS = "mobile-connection-success"
 
+let INVALID_TOKEN = "invalid-token";
+
+let K_DEFAULTS_CONNECTION = "K_DEFAULTS_CONNECTION"
 
 
 class WebViewVC: UIViewController, WKUIDelegate {
@@ -60,8 +63,39 @@ class WebViewVC: UIViewController, WKUIDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        suggestShowingCameraIfNeeded()
+        if let conn = self.loadSavedConnectionInUserDefaults() {
+            self.connectSocket(connection: conn)
+        } else {
+            suggestShowingCameraIfNeeded()
+        }
     }
+    
+    
+    private func saveConnectionInUserDefaults(connection: Connection){
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(connection) {
+            let defaults = UserDefaults.standard
+            defaults.set(encoded, forKey: K_DEFAULTS_CONNECTION)
+        }
+    }
+    
+    private func loadSavedConnectionInUserDefaults() -> Connection?{
+        let defaults = UserDefaults.standard
+        if let savedConnection = defaults.object(forKey: K_DEFAULTS_CONNECTION) as? Data {
+            let decoder = JSONDecoder()
+            if let loadedConnection = try? decoder.decode(Connection.self, from: savedConnection) {
+                return loadedConnection
+            }
+        }
+       return nil
+    }
+    
+    private func removeSavedConnectionFromUserDefaults(){
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: K_DEFAULTS_CONNECTION)
+        defaults.synchronize()
+    }
+    
     
     @IBAction func ibActionConnectionButton(_ sender: UIButton) {
 
@@ -274,22 +308,21 @@ class WebViewVC: UIViewController, WKUIDelegate {
         
         socket.on(clientEvent: .connect) {data, ack in
             print("socket connected!")
+            
             DispatchQueue.main.async{
-                self.buttonConnection?.setTitle("Connected", for: .normal)
-                self.buttonConnection?.setTitleColor(UIColor.green, for: .normal)
-                let msgs : [Message] = [Message(name: .MobileConnectionSuccess, dataString: "", dataNumber: 0)];
-                let encoder = JSONEncoder()
-                let d = try! encoder.encode(msgs)
-                let json = String(data: d, encoding: .utf8)!
-//                print( json )
-                socket.emit( EVENT_MOBILE_TO_DESKTOP , json)
+                self.buttonConnection?.setTitle("Pairing ...", for: .normal)
+                self.buttonConnection?.setTitleColor(UIColor.yellow, for: .normal)
             }
+            
         }
         
         socket.on(clientEvent: .error) {data, ack in
             var message = "Unkown Error"
             if let arr = data as? Array<String>, arr.count > 0 {
                 message = arr[0]
+            }
+            if (message == "Tried emitting when not connected"){
+                return
             }
             let ac = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -318,10 +351,34 @@ class WebViewVC: UIViewController, WKUIDelegate {
             print("\(EVENT_SERVER_TO_MOBILE) :\n\n", data)
             
             if let msgs = self.extractMessages(data: data){
+                
+                if let msg = msgs.first, msg.name == .ConnectionFailure, msg.dataString == INVALID_TOKEN {
+                    self.removeSavedConnectionFromUserDefaults()
+                    self.suggestShowingCameraIfNeeded()
+                    return
+                }
+                
+                if let msg = msgs.first, msg.name == .MobileConnectionSuccess {
+                    self.saveConnectionInUserDefaults(connection: connection)
+                    
+                    DispatchQueue.main.async{
+                        self.buttonConnection?.setTitle("Connected", for: .normal)
+                        self.buttonConnection?.setTitleColor(UIColor.green, for: .normal)
+                        let msgs : [Message] = [Message(name: .MobileConnectionSuccess, dataString: "", dataNumber: 0)];
+                        let encoder = JSONEncoder()
+                        let d = try! encoder.encode(msgs)
+                        let json = String(data: d, encoding: .utf8)!
+                        socket.emit( EVENT_MOBILE_TO_DESKTOP , json)
+                    }
+                    
+                    return
+                }
+                
                 self.runMessages(messages: msgs)
             }
 
         }
+        
         
         socket.on(EVENT_DESKTOP_TO_MOBILE)  {data, ack in
             print("\(EVENT_DESKTOP_TO_MOBILE) :\n\n", data)
@@ -354,7 +411,10 @@ enum MessageName: String, Codable
     case MobileToBackground = "mobile-to-backgound"
     case MobileIsForeground = "mobile-is-foreground"
     case NewSyncRequired = "new-sync-required"
+    case ConnectionFailure = "connection-failure";
 }
+
+
 
 struct Message : Codable {
     
