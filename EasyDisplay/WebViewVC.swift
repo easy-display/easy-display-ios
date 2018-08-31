@@ -23,14 +23,14 @@ let INVALID_TOKEN = "invalid-token";
 let K_DEFAULTS_CONNECTION = "K_DEFAULTS_CONNECTION"
 
 
-class WebViewVC: UIViewController, WKUIDelegate {
+class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     var webView: WKWebView?
-    
     var connection: Connection?
     
     @IBOutlet weak var viewContainer: UIView?
     @IBOutlet weak var buttonConnection: UIButton?
+    @IBOutlet weak var activityIndicatorView : UIActivityIndicatorView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,8 +47,16 @@ class WebViewVC: UIViewController, WKUIDelegate {
         
     }
     
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        activityIndicatorView?.isHidden = true
+    }
+    
     func emitMessage(to: String ,name: MessageName, dataString: String = "" , dataNumber: Double = 0){
         guard let socket = socket else { return }
+        if (socket.status != .connected){
+            print("Error: emitMessage while still not connected")
+            return
+        }
         let msg = messageWith(name: name, dataString: dataString, dataNumber: dataNumber)
         socket.emit( to , msg )
     }
@@ -94,6 +102,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: K_DEFAULTS_CONNECTION)
         defaults.synchronize()
+        self.connection = nil
     }
     
     
@@ -107,6 +116,9 @@ class WebViewVC: UIViewController, WKUIDelegate {
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             present(alert, animated: true)
+        }
+        if (self.socket?.status == SocketIOStatus.connecting){
+            self.loadCamera()
         }
         
     }
@@ -140,13 +152,6 @@ class WebViewVC: UIViewController, WKUIDelegate {
 
     }
     
-    @IBAction func ibActionDelme() {
-        guard let manager = manager else {
-            return
-        }
-        let socket = manager.defaultSocket
-        socket.emit(EVENT_MOBILE_TO_SERVER , ["asdf" : "asdf"])
-    }
     
     func setupWebView(){
         
@@ -159,6 +164,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             return
         }
         webView.uiDelegate = self
+        webView.navigationDelegate = self
         viewContainer.addSubview(webView)
         webView.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(viewContainer)
@@ -167,6 +173,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             make.right.equalTo(viewContainer)
         }
         
+        activityIndicatorView?.isHidden = false
         //let myURL = URL(string: "https://www.google.com/")
         let myURL = URL(string: "http://sensu.devops.arabiaweather.com/#/events")
         let myRequest = URLRequest(url: myURL!)
@@ -190,15 +197,18 @@ class WebViewVC: UIViewController, WKUIDelegate {
                 print("DesktopConnectionLost")
     
             case .EvaluateJS:
+                activityIndicatorView?.isHidden = false
                 let js = msg.dataString
                 webView?.evaluateJavaScript(js, completionHandler: { (obj : Any?, error: Error? ) in
                     print("EvaluateJS js: " , js)
                     if let err = error {
                         print("EvaluateJS error: " , err.localizedDescription)
                     }
+                    self.activityIndicatorView?.isHidden = true
                 })
             
             case .OpenURL:
+                activityIndicatorView?.isHidden = false
                 let urlStr = msg.dataString
                 let url = URL(string: urlStr)!
                 let req = URLRequest(url: url)
@@ -238,6 +248,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
                 webView?.scrollView.setContentOffset(CGPoint(x: newX, y: newY), animated: true)
             
             case .Reload:
+                activityIndicatorView?.isHidden = false
                 webView?.reload()
                 
             default:
@@ -286,7 +297,7 @@ class WebViewVC: UIViewController, WKUIDelegate {
             return
         }
         self.buttonConnection?.setTitle("Connecting ...", for: .normal)
-        self.buttonConnection?.setTitleColor(UIColor.yellow, for: .normal)
+        self.buttonConnection?.setTitleColor(UIColor.green, for: .normal)
         
         let namespace = "/mobile/\(con.version)"
         
@@ -316,14 +327,15 @@ class WebViewVC: UIViewController, WKUIDelegate {
             
         }
         
-        socket.on(clientEvent: .error) {data, ack in
+        socket.on(clientEvent: .error) {data , ack in
             var message = "Unkown Error"
             if let arr = data as? Array<String>, arr.count > 0 {
                 message = arr[0]
+                print("socket.on(clientEvent: .error): \n\(message)")
             }
-            if (message == "Tried emitting when not connected"){
-                return
-            }
+//            if (message == "Tried emitting when not connected"){
+//                return
+//            }
             let ac = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(ac, animated: true, completion: nil)
@@ -340,10 +352,11 @@ class WebViewVC: UIViewController, WKUIDelegate {
         
         
         socket.on(clientEvent: .statusChange) {data, ack in
-            print("socket disconnected!")
+            print("socket statusChange", data)
             DispatchQueue.main.async{
-                self.buttonConnection?.setTitle(" ????? ", for: .normal)
-                self.buttonConnection?.setTitleColor(UIColor.gray, for: .normal)
+                guard let status = self.socket?.status else { return }
+                self.buttonConnection?.setTitle("\(status)", for: .normal)
+                self.buttonConnection?.setTitleColor(UIColor.red, for: .normal)
             }
         }
 
@@ -363,12 +376,12 @@ class WebViewVC: UIViewController, WKUIDelegate {
                     
                     DispatchQueue.main.async{
                         self.buttonConnection?.setTitle("Connected", for: .normal)
-                        self.buttonConnection?.setTitleColor(UIColor.green, for: .normal)
-                        let msgs : [Message] = [Message(name: .MobileConnectionSuccess, dataString: "", dataNumber: 0)];
-                        let encoder = JSONEncoder()
-                        let d = try! encoder.encode(msgs)
-                        let json = String(data: d, encoding: .utf8)!
-                        socket.emit( EVENT_MOBILE_TO_DESKTOP , json)
+                        self.buttonConnection?.setTitleColor(UIColor.lightGray, for: .normal)
+//                        let msgs : [Message] = [Message(name: .MobileConnectionSuccess, dataString: "", dataNumber: 0)];
+//                        let encoder = JSONEncoder()
+//                        let d = try! encoder.encode(msgs)
+//                        let json = String(data: d, encoding: .utf8)!
+                        self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileConnectionSuccess)
                     }
                     
                     return

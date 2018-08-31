@@ -38,6 +38,22 @@
                                         </button>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="bYC-Ym-Ohy"/>
+                                    <barButtonItem width="9" style="plain" id="1S9-pe-2JD">
+                                        <view key="customView" contentMode="scaleToFill" id="FU9-cV-ijr">
+                                            <rect key="frame" x="326" y="5.5" width="33" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Wcp-wu-PPo">
+                                                    <rect key="frame" x="7" y="6.5" width="20" height="20"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="Wcp-wu-PPo" firstAttribute="centerY" secondItem="FU9-cV-ijr" secondAttribute="centerY" id="CXt-ka-2IF"/>
+                                                <constraint firstItem="Wcp-wu-PPo" firstAttribute="centerX" secondItem="FU9-cV-ijr" secondAttribute="centerX" id="KBj-bn-YLa"/>
+                                            </constraints>
+                                        </view>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ir-4C-FMS">
@@ -58,6 +74,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="Wcp-wu-PPo" id="wob-8v-Kj3"/>
                         <outlet property="buttonConnection" destination="s9U-zI-V9i" id="S94-wu-85i"/>
                         <outlet property="viewContainer" destination="1ir-4C-FMS" id="7zn-OK-gqb"/>
                     </connections>
