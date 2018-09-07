@@ -289,7 +289,22 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     var manager : SocketManager?
     var socket: SocketIOClient?
     
+    func reset(){
+        closeExistingSocketIfExists()
+        removeSavedConnectionFromUserDefaults()
+        suggestShowingCameraIfNeeded()
+    }
+    
+    func closeExistingSocketIfExists(){
+        if let s = socket {
+            s.disconnect()
+            socket = nil
+        }
+    }
+    
     func connectSocket(connection: Connection){
+        
+        closeExistingSocketIfExists()
         
         self.connection = connection
         
@@ -316,6 +331,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         guard let socket = socket else {
             return
         }
+    
         
         socket.on(clientEvent: .connect) {data, ack in
             print("socket connected!")
@@ -333,9 +349,21 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
                 message = arr[0]
                 print("socket.on(clientEvent: .error): \n\(message)")
             }
-//            if (message == "Tried emitting when not connected"){
-//                return
-//            }
+            
+            if (message == "The request timed out."){
+                print("socket.on(clientEvent: .error): \n\(message)")
+                self.reset()
+            }
+            if (message == "Could not connect to the server."){
+                print("socket.on(clientEvent: .error): \n\(message)")
+                self.reset()
+            }
+            
+            if (message == "Tried emitting when not connected"){
+                assert(false,"Tried emitting when not connected, review your code")
+            }
+
+            
             let ac = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(ac, animated: true, completion: nil)
@@ -366,8 +394,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             if let msgs = self.extractMessages(data: data){
                 
                 if let msg = msgs.first, msg.name == .ConnectionFailure, msg.dataString == INVALID_TOKEN {
-                    self.removeSavedConnectionFromUserDefaults()
-                    self.suggestShowingCameraIfNeeded()
+                    self.reset()
                     return
                 }
                 
