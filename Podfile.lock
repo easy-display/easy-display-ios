@@ -1,24 +1,37 @@
 PODS:
+  - Crashlytics (3.10.2):
+    - Fabric (~> 1.7.7)
+  - Fabric (1.7.7)
+  - GoogleAnalytics (3.17.0)
   - SnapKit (4.0.0)
   - Socket.IO-Client-Swift (13.2.0):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.5)
 
 DEPENDENCIES:
+  - Crashlytics
+  - Fabric
+  - GoogleAnalytics
   - SnapKit (~> 4.0.0)
   - Socket.IO-Client-Swift (~> 13.2.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Crashlytics
+    - Fabric
+    - GoogleAnalytics
     - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
 
 SPEC CHECKSUMS:
+  Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
+  Fabric: bda89e242bce1b7b8ab264248cf3407774ce0095
+  GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Socket.IO-Client-Swift: 4698ea9eb2955eecf7fdf06c487ff1597e4cd779
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
 
-PODFILE CHECKSUM: 773515725211a6246453956d1beea6aba44b4dac
+PODFILE CHECKSUM: 46ae32331c8b1c3ee21d622f18c421333c63b107
 
 COCOAPODS: 1.5.3

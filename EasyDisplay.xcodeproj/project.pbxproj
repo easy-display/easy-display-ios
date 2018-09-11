@@ -38,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10161C6421481CC500D4C3A3 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		1024275C2110FE2200A5DF15 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		10898B96210F9A450045796E /* QRCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeVC.swift; sourceTree = "<group>"; };
 		10898B98210FAC8E0045796E /* QRCode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = QRCode.storyboard; sourceTree = "<group>"; };
@@ -119,6 +120,7 @@
 				10D04A6820F87DA300DD63CF /* Assets.xcassets */,
 				10D04A6A20F87DA300DD63CF /* LaunchScreen.storyboard */,
 				10D04A6D20F87DA300DD63CF /* Info.plist */,
+				10161C6421481CC500D4C3A3 /* Bridging-Header.h */,
 			);
 			path = EasyDisplay;
 			sourceTree = "<group>";
@@ -170,6 +172,7 @@
 				10D04A5B20F87DA000DD63CF /* Frameworks */,
 				10D04A5C20F87DA000DD63CF /* Resources */,
 				3D760924D84436A245B63426 /* [CP] Embed Pods Frameworks */,
+				10161C652148203E00D4C3A3 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -288,6 +291,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		10161C652148203E00D4C3A3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 4466ab894fe779513739da6271dc1da60173503a 543c5a5b92fcbbc283bb470008fe56a6b183fc2c0bad821b63e3e59a5d866139\n";
+		};
 		3D760924D84436A245B63426 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -449,6 +465,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -502,6 +519,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -522,6 +540,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = info.easydisplay.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "EasyDisplay/Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -542,6 +561,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = info.easydisplay.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "EasyDisplay/Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

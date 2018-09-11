@@ -7,5 +7,8 @@ inhibit_all_warnings!
 target 'EasyDisplay' do
     pod 'Socket.IO-Client-Swift', '~> 13.2.0'
 		pod 'SnapKit', '~> 4.0.0'
+		pod 'GoogleAnalytics'
+		pod 'Fabric'
+		pod 'Crashlytics'
 end
 
