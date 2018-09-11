@@ -174,14 +174,17 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         }
         
         activityIndicatorView?.isHidden = false
-        //let myURL = URL(string: "https://www.google.com/")
-        let myURL = URL(string: "http://sensu.devops.arabiaweather.com/#/events")
+        let myURL = URL(string: landingPage())
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         webView.isUserInteractionEnabled = false
         
     }
 
+    private func landingPage() -> String {
+        return "https://www.easydisplay.info/ios-app-pairing-success"
+    }
+    
     func runMessages(messages: [Message]){
         messages.forEach { (msg) in
             
@@ -466,13 +469,10 @@ struct Message : Codable {
         self.dataString = dataString
         self.dataNumber = dataNumber
         self.name = name
-//        var n = MessageName.Unkown
-//        if let n2 = MessageName(rawValue: name) {
-//            n = n2
-//        }
-//        self.name = n
     }
     
 }
+
+
 
 
