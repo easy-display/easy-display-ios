@@ -68,6 +68,13 @@ class QRCodeVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         captureSession.startRunning()
         
     }
+    
+    
+    // this is necessary for iPad/iOS 9 landscape mode.
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer.frame = self.view.bounds
+    }
 
     
     func failed() {
