@@ -124,13 +124,17 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     }
     
     func suggestShowingCameraIfNeeded(){
+        if (Platform.isSimulator){
+            self.connectSocket(connection: Connection(host: "localhost", scheme: "http", token: "SIMULATOR", version: "0.1"))
+            return
+        }
         if (self.connection == nil){
             let alert = UIAlertController(title: "QR Code", message: "Open Camera to scan QR Code?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
                self.loadCamera()
             }))
             present(alert, animated: true) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                     alert.dismiss(animated: true, completion: {
                         self.loadCamera()
                     })
@@ -174,16 +178,23 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         }
         
         activityIndicatorView?.isHidden = false
-        let myURL = URL(string: landingPage())
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        webviewLoadUrl(url: pairingRequiredPageURL)
         webView.isUserInteractionEnabled = false
         
     }
 
-    private func landingPage() -> String {
-        return "https://www.easydisplay.info/ios-app-pairing-success"
+    
+    func webviewLoadUrl(url: String){
+        let myURL = URL(string: url)
+        let myRequest = URLRequest(url: myURL!)
+        webView?.load(myRequest)
     }
+    
+    
+    let pairingRequiredPageURL = "https://www.easydisplay.info/ios-app-pairing-required"
+    
+    let pairingSuccessPageURL = "https://www.easydisplay.info/ios-app-pairing-success"
+    
     
     func runMessages(messages: [Message]){
         messages.forEach { (msg) in
@@ -412,6 +423,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 //                        let d = try! encoder.encode(msgs)
 //                        let json = String(data: d, encoding: .utf8)!
                         self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileConnectionSuccess)
+                        self.webviewLoadUrl(url: self.pairingSuccessPageURL)
                     }
                     
                     return

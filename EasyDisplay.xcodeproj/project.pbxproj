@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10161C692149B75000D4C3A3 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10161C682149B75000D4C3A3 /* Platform.swift */; };
 		1024275D2110FE2200A5DF15 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024275C2110FE2200A5DF15 /* Connection.swift */; };
 		10898B97210F9A450045796E /* QRCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10898B96210F9A450045796E /* QRCodeVC.swift */; };
 		10898B99210FAC8E0045796E /* QRCode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10898B98210FAC8E0045796E /* QRCode.storyboard */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		10161C6421481CC500D4C3A3 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		10161C682149B75000D4C3A3 /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		1024275C2110FE2200A5DF15 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		10898B96210F9A450045796E /* QRCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeVC.swift; sourceTree = "<group>"; };
 		10898B98210FAC8E0045796E /* QRCode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = QRCode.storyboard; sourceTree = "<group>"; };
@@ -86,6 +88,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10161C662149B74300D4C3A3 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				10161C672149B74300D4C3A3 /* utility */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		10161C672149B74300D4C3A3 /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				10161C682149B75000D4C3A3 /* Platform.swift */,
+			);
+			path = utility;
+			sourceTree = "<group>";
+		};
 		10D04A5520F87DA000DD63CF = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +129,7 @@
 		10D04A6020F87DA100DD63CF /* EasyDisplay */ = {
 			isa = PBXGroup;
 			children = (
+				10161C662149B74300D4C3A3 /* app */,
 				10D04A6120F87DA100DD63CF /* AppDelegate.swift */,
 				10D04A6320F87DA100DD63CF /* WebViewVC.swift */,
 				1024275C2110FE2200A5DF15 /* Connection.swift */,
@@ -351,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10161C692149B75000D4C3A3 /* Platform.swift in Sources */,
 				10D04A6420F87DA100DD63CF /* WebViewVC.swift in Sources */,
 				10D04A6220F87DA100DD63CF /* AppDelegate.swift in Sources */,
 				10898B97210F9A450045796E /* QRCodeVC.swift in Sources */,
