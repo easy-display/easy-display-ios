@@ -185,9 +185,15 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     
     func webviewLoadUrl(url: String){
-        let myURL = URL(string: url)
-        let myRequest = URLRequest(url: myURL!)
-        webView?.load(myRequest)
+        if let url = URL(string: url) {
+            let myRequest = URLRequest(url: url)
+            webView?.load(myRequest)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Invalid URL: '\(url)'", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alert.addAction(action)
+            show(alert, sender: nil)
+        }
     }
     
     
@@ -224,9 +230,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             case .OpenURL:
                 activityIndicatorView?.isHidden = false
                 let urlStr = msg.dataString
-                let url = URL(string: urlStr)!
-                let req = URLRequest(url: url)
-                webView?.load(req)
+                self.webviewLoadUrl(url: urlStr)
 
 
             case .Scroll:
