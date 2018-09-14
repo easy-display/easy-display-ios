@@ -27,7 +27,7 @@
                                     <barButtonItem width="100" style="plain" id="4Te-yM-7er">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="s9U-zI-V9i">
                                             <rect key="frame" x="16" y="5" width="100" height="34"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <state key="normal" title="---">
                                                 <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -37,17 +37,26 @@
                                             </connections>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="bYC-Ym-Ohy"/>
-                                    <barButtonItem width="9" style="plain" id="1S9-pe-2JD">
+                                    <barButtonItem style="plain" id="UFO-4v-5vX">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Rkt-R9-Tl9">
+                                            <rect key="frame" x="116" y="5" width="138" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.92394441437742603" green="0.92394441437742603" blue="0.92394441437742603" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <state key="normal" title="http:// address ...">
+                                                <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem width="33" style="plain" id="1S9-pe-2JD">
                                         <view key="customView" contentMode="scaleToFill" id="FU9-cV-ijr">
-                                            <rect key="frame" x="326" y="5.5" width="33" height="33"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <rect key="frame" x="326" y="6" width="33" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Wcp-wu-PPo">
                                                     <rect key="frame" x="7" y="6.5" width="20" height="20"/>
                                                 </activityIndicatorView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="Wcp-wu-PPo" firstAttribute="centerY" secondItem="FU9-cV-ijr" secondAttribute="centerY" id="CXt-ka-2IF"/>
                                                 <constraint firstItem="Wcp-wu-PPo" firstAttribute="centerX" secondItem="FU9-cV-ijr" secondAttribute="centerX" id="KBj-bn-YLa"/>
@@ -75,6 +84,7 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicatorView" destination="Wcp-wu-PPo" id="wob-8v-Kj3"/>
+                        <outlet property="buttonAddress" destination="Rkt-R9-Tl9" id="YUN-pC-Q5N"/>
                         <outlet property="buttonConnection" destination="s9U-zI-V9i" id="S94-wu-85i"/>
                         <outlet property="viewContainer" destination="1ir-4C-FMS" id="7zn-OK-gqb"/>
                     </connections>

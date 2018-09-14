@@ -31,11 +31,13 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     @IBOutlet weak var viewContainer: UIView?
     @IBOutlet weak var buttonConnection: UIButton?
     @IBOutlet weak var activityIndicatorView : UIActivityIndicatorView?
+    @IBOutlet weak var buttonAddress: UIButton?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
-        
+        setupButtonAddress()
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillResignActive, object: nil, queue: nil) { (notif) in
             self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileToBackground)
         }
@@ -49,6 +51,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicatorView?.isHidden = true
+        buttonAddress?.setTitle(webView.url?.absoluteString, for: .normal)
     }
     
     func emitMessage(to: String ,name: MessageName, dataString: String = "" , dataNumber: Double = 0){
@@ -59,6 +62,11 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         }
         let msg = messageWith(name: name, dataString: dataString, dataNumber: dataNumber)
         socket.emit( to , msg )
+    }
+    
+    func setupButtonAddress(){
+        self.buttonAddress?.setTitle("", for: .normal)
+        self.buttonAddress?.layer.cornerRadius = 3
     }
     
     func messageWith( name: MessageName, dataString: String = "" , dataNumber: Double = 0) -> String {
@@ -192,9 +200,15 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             let alert = UIAlertController(title: "Error", message: "Invalid URL: '\(url)'", preferredStyle: .alert)
             let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
             alert.addAction(action)
-            show(alert, sender: nil)
+            present(alert, animated: true) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    alert.dismiss(animated: true, completion: nil)
+                }
+            }
+            
         }
     }
+    
     
     
     let pairingRequiredPageURL = "https://www.easydisplay.info/ios-app-pairing-required"
