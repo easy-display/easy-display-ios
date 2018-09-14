@@ -152,6 +152,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     }
     
     func loadCamera(){
+        self.resetSavedConnection()
         let storyboard = UIStoryboard(name: "QRCode", bundle: Bundle.main)
         if let qrVC = storyboard.instantiateInitialViewController() as? QRCodeVC {
             qrVC.callbackConnection = { (con: Connection) -> () in
@@ -321,9 +322,14 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     var manager : SocketManager?
     var socket: SocketIOClient?
     
-    func reset(){
+    func resetSavedConnection(){
         closeExistingSocketIfExists()
         removeSavedConnectionFromUserDefaults()
+        
+    }
+    
+    func resetAndShowCamera(){
+        resetSavedConnection()
         suggestShowingCameraIfNeeded()
     }
     
@@ -336,6 +342,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     
     func connectSocket(connection: Connection){
         
+        removeSavedConnectionFromUserDefaults()
         closeExistingSocketIfExists()
         
         self.connection = connection
@@ -384,11 +391,11 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             
             if (message == "The request timed out."){
                 print("socket.on(clientEvent: .error): \n\(message)")
-                self.reset()
+                self.resetAndShowCamera()
             }
             if (message == "Could not connect to the server."){
                 print("socket.on(clientEvent: .error): \n\(message)")
-                self.reset()
+                self.resetAndShowCamera()
             }
             
             if (message == "Tried emitting when not connected"){
@@ -426,7 +433,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             if let msgs = self.extractMessages(data: data){
                 
                 if let msg = msgs.first, msg.name == .ConnectionFailure, msg.dataString == INVALID_TOKEN {
-                    self.reset()
+                    self.resetAndShowCamera()
                     return
                 }
                 
