@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import SnapKit
 import SocketIO
+import SVProgressHUD
 
 
 let EVENT_MOBILE_TO_DESKTOP = "event-mobile-to-desktop"
@@ -50,6 +51,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        SVProgressHUD.dismiss()
         activityIndicatorView?.isHidden = true
         buttonAddress?.setTitle(webView.url?.absoluteString, for: .normal)
     }
@@ -194,10 +196,12 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     
     func webviewLoadUrl(url: String){
+        SVProgressHUD.show()
         if let url = URL(string: url) {
             let myRequest = URLRequest(url: url)
             webView?.load(myRequest)
         } else {
+            SVProgressHUD.dismiss()
             let alert = UIAlertController(title: "Error", message: "Invalid URL: '\(url)'", preferredStyle: .alert)
             let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
             alert.addAction(action)
@@ -281,6 +285,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
                 webView?.scrollView.setContentOffset(CGPoint(x: newX, y: newY), animated: true)
             
             case .Reload:
+                SVProgressHUD.show()
                 activityIndicatorView?.isHidden = false
                 webView?.reload()
                 
@@ -342,6 +347,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     
     func connectSocket(connection: Connection){
         
+        SVProgressHUD.show(withStatus: "Connecting, Please Wait")
         removeSavedConnectionFromUserDefaults()
         closeExistingSocketIfExists()
         
@@ -374,7 +380,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         
         socket.on(clientEvent: .connect) {data, ack in
             print("socket connected!")
-            
+            SVProgressHUD.dismiss()
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle("Pairing ...", for: .normal)
                 self.buttonConnection?.setTitleColor(UIColor.yellow, for: .normal)
@@ -383,6 +389,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         }
         
         socket.on(clientEvent: .error) {data , ack in
+            SVProgressHUD.dismiss()
             var message = "Unkown Error"
             if let arr = data as? Array<String>, arr.count > 0 {
                 message = arr[0]
@@ -411,6 +418,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         
         socket.on(clientEvent: .disconnect) {data, ack in
             print("socket disconnected!")
+            SVProgressHUD.dismiss()
             DispatchQueue.main.async{
                 self.buttonConnection?.setTitle("Disconnected", for: .normal)
                 self.buttonConnection?.setTitleColor(UIColor.red, for: .normal)
@@ -420,6 +428,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         
         socket.on(clientEvent: .statusChange) {data, ack in
             print("socket statusChange", data)
+            SVProgressHUD.dismiss()
             DispatchQueue.main.async{
                 guard let status = self.socket?.status else { return }
                 self.buttonConnection?.setTitle("\(status)", for: .normal)
@@ -462,7 +471,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         
         socket.on(EVENT_DESKTOP_TO_MOBILE)  {data, ack in
             print("\(EVENT_DESKTOP_TO_MOBILE) :\n\n", data)
-            
+            SVProgressHUD.showInfo(withStatus: "Request Received.")
             if let msgs = self.extractMessages(data: data){
                 self.runMessages(messages: msgs)
             }

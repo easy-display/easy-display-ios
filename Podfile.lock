@@ -7,6 +7,7 @@ PODS:
   - Socket.IO-Client-Swift (13.2.0):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.5)
+  - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
   - Crashlytics
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - GoogleAnalytics
   - SnapKit (~> 4.0.0)
   - Socket.IO-Client-Swift (~> 13.2.0)
+  - SVProgressHUD (~> 2.2.5)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -23,6 +25,7 @@ SPEC REPOS:
     - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
+    - SVProgressHUD
 
 SPEC CHECKSUMS:
   Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
@@ -31,7 +34,8 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Socket.IO-Client-Swift: 4698ea9eb2955eecf7fdf06c487ff1597e4cd779
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 46ae32331c8b1c3ee21d622f18c421333c63b107
+PODFILE CHECKSUM: edc221dcff54c9c548116fc8005ce47e6c8dec91
 
 COCOAPODS: 1.5.3

@@ -10,5 +10,6 @@ target 'EasyDisplay' do
 		pod 'GoogleAnalytics'
 		pod 'Fabric'
 		pod 'Crashlytics'
+		pod 'SVProgressHUD', '~> 2.2.5'
 end
 

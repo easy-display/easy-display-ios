@@ -26,3 +26,4 @@ DerivedData/
 !default.perspectivev3
 *.xcworkspace/
 Pods/
+EasyDisplay.xcodeproj/xcuserdata/
