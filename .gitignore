@@ -27,3 +27,6 @@ DerivedData/
 *.xcworkspace/
 Pods/
 EasyDisplay.xcodeproj/xcuserdata/
+
+*.app.dSYM.zip
+*.ipa

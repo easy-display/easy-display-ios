@@ -1,0 +1,5 @@
+please download the accompanying  Mac application from: https://www.easydisplay.info/download/
+to operate:
+1 - open the Mac application
+2 - scan the QR code using the iPad / iPhone
+3 - operate/control the iPad using the Mac application

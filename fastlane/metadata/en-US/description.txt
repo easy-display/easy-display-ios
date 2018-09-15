@@ -1,0 +1,4 @@
+EasyDisplay is a browser controlled by a desktop app.
+it can make your mobile/tablet a display-board without moving your hands from your keyboard.
+it is made with simple single page website that do not need user interaction, but are useful for only display purposes.   
+You can inject and execute javascript to do some specific tasks like login or alter the page.
