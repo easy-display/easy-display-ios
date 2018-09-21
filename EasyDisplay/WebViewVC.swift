@@ -190,7 +190,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         
         activityIndicatorView?.isHidden = false
         webviewLoadUrl(url: pairingRequiredPageURL)
-        webView.isUserInteractionEnabled = false
+        webView.isUserInteractionEnabled = true
         
     }
 
@@ -330,7 +330,15 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     func resetSavedConnection(){
         closeExistingSocketIfExists()
         removeSavedConnectionFromUserDefaults()
-        
+    }
+    
+    func suggestResetAndShowCamera(){
+        let ac = UIAlertController(title: "Something went wrong", message: "Would you like to restart the pairing process?", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (a: UIAlertAction) in
+            self.resetAndShowCamera()
+        }))
+        ac.addAction(UIAlertAction(title: "No, wait.", style: .default, handler: nil))
+        present(ac, animated: true, completion: nil)
     }
     
     func resetAndShowCamera(){
@@ -344,6 +352,8 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             socket = nil
         }
     }
+    
+    var socketErrorsAlert: UIAlertController?
     
     func connectSocket(connection: Connection){
         
@@ -398,11 +408,11 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             
             if (message == "The request timed out."){
                 print("socket.on(clientEvent: .error): \n\(message)")
-                self.resetAndShowCamera()
+                self.suggestResetAndShowCamera()
             }
             if (message == "Could not connect to the server."){
                 print("socket.on(clientEvent: .error): \n\(message)")
-                self.resetAndShowCamera()
+                self.suggestResetAndShowCamera()
             }
             
             if (message == "Tried emitting when not connected"){
@@ -410,9 +420,9 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             }
 
             
-            let ac = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(ac, animated: true, completion: nil)
+            self.socketErrorsAlert = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
+            self.socketErrorsAlert?.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(self.socketErrorsAlert!, animated: true, completion: nil)
         }
         
         
@@ -457,7 +467,12 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 //                        let d = try! encoder.encode(msgs)
 //                        let json = String(data: d, encoding: .utf8)!
                         self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileConnectionSuccess)
-                        self.webviewLoadUrl(url: self.pairingSuccessPageURL)
+                        self.socketErrorsAlert?.dismiss(animated: true, completion: nil)
+                        if let url = self.webView?.url , !url.absoluteString.contains("easydisplay.info") {
+                            self.webviewLoadUrl(url: self.pairingSuccessPageURL)
+                        }
+                        
+                        
                     }
                     
                     return
