@@ -22,6 +22,7 @@ let MOBILE_CONNECTION_SUCCESS = "mobile-connection-success"
 let INVALID_TOKEN = "invalid-token";
 
 let K_DEFAULTS_CONNECTION = "K_DEFAULTS_CONNECTION"
+let K_DEFAULTS_LAST_USED_URL = "K_DEFAULTS_LAST_USED_URL"
 
 
 class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
@@ -47,13 +48,23 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileIsForeground)
         }
 
-        
+    }
+
+    func lastUsedUrl() -> String?{
+        let str = UserDefaults.standard.string(forKey: K_DEFAULTS_LAST_USED_URL)
+        return str
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         SVProgressHUD.dismiss()
         activityIndicatorView?.isHidden = true
         buttonAddress?.setTitle(webView.url?.absoluteString, for: .normal)
+        saveLastUsedUrl(urlString: webView.url?.absoluteString)
+    }
+    
+    func saveLastUsedUrl(urlString: String?){
+        UserDefaults.standard.set(urlString, forKey: K_DEFAULTS_LAST_USED_URL)
+        UserDefaults.standard.synchronize()
     }
     
     func emitMessage(to: String ,name: MessageName, dataString: String = "" , dataNumber: Double = 0){
@@ -189,7 +200,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         }
         
         activityIndicatorView?.isHidden = false
-        webviewLoadUrl(url: pairingRequiredPageURL)
+        webviewLoadUrl(url: PAIRING_REQUIRED_URL)
         webView.isUserInteractionEnabled = true
         
     }
@@ -216,9 +227,9 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     
     
     
-    let pairingRequiredPageURL = "https://www.easydisplay.info/ios-app-pairing-required"
+    let PAIRING_REQUIRED_URL = "https://www.easydisplay.info/ios-app-pairing-required"
     
-    let pairingSuccessPageURL = "https://www.easydisplay.info/ios-app-pairing-success"
+    let PAIRING_SUCCESS_URL = "https://www.easydisplay.info/ios-app-pairing-success"
     
     
     func runMessages(messages: [Message]){
@@ -333,12 +344,14 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     }
     
     func suggestResetAndShowCamera(){
-        let ac = UIAlertController(title: "Something went wrong", message: "Would you like to restart the pairing process?", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (a: UIAlertAction) in
+        self.alertControllerSocketError?.dismiss(animated: true, completion: nil)
+        
+        alertContollerResetPairing = UIAlertController(title: "Something went wrong", message: "Would you like to restart the pairing process?", preferredStyle: .alert)
+        alertContollerResetPairing?.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (a: UIAlertAction) in
             self.resetAndShowCamera()
         }))
-        ac.addAction(UIAlertAction(title: "No, wait.", style: .default, handler: nil))
-        present(ac, animated: true, completion: nil)
+        alertContollerResetPairing?.addAction(UIAlertAction(title: "No, wait.", style: .default, handler: nil))
+        present(alertContollerResetPairing!, animated: true, completion: nil)
     }
     
     func resetAndShowCamera(){
@@ -353,7 +366,8 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         }
     }
     
-    var socketErrorsAlert: UIAlertController?
+    var alertControllerSocketError: UIAlertController?
+    var alertContollerResetPairing: UIAlertController?
     
     func connectSocket(connection: Connection){
         
@@ -420,9 +434,9 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             }
 
             
-            self.socketErrorsAlert = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
-            self.socketErrorsAlert?.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(self.socketErrorsAlert!, animated: true, completion: nil)
+            self.alertControllerSocketError = UIAlertController(title: "Error", message: message , preferredStyle: .alert)
+            self.alertControllerSocketError?.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(self.alertControllerSocketError!, animated: true, completion: nil)
         }
         
         
@@ -467,11 +481,10 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 //                        let d = try! encoder.encode(msgs)
 //                        let json = String(data: d, encoding: .utf8)!
                         self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileConnectionSuccess)
-                        self.socketErrorsAlert?.dismiss(animated: true, completion: nil)
-                        if let url = self.webView?.url , !url.absoluteString.contains("easydisplay.info") {
-                            self.webviewLoadUrl(url: self.pairingSuccessPageURL)
-                        }
-                        
+                        self.alertControllerSocketError?.dismiss(animated: true, completion: nil)
+                        self.alertContollerResetPairing?.dismiss(animated: true, completion: nil)
+//                        if let url = self.webView?.url , !url.absoluteString.contains("easydisplay.info") {}
+                        self.webviewLoadUrl(url: self.lastUsedUrl() ?? self.PAIRING_SUCCESS_URL)
                         
                     }
                     

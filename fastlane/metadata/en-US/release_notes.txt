@@ -1,1 +1,4 @@
-
+0.2
+The app is taking it's shape, and becoming more clear.
+The issues are being fixed, and it is becoming more stable.
+Bug fixing
