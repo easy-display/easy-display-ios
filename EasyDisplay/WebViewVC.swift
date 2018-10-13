@@ -19,6 +19,12 @@ let EVENT_DESKTOP_TO_MOBILE = "event-desktop-to-mobile"
 let EVENT_SERVER_TO_MOBILE = "event-server-to-mobile"
 let MOBILE_CONNECTION_SUCCESS = "mobile-connection-success"
 
+
+
+let PAIRING_REQUIRED_URL = "https://www.easydisplay.info/ios-app-pairing-required"
+let PAIRING_SUCCESS_URL = "https://www.easydisplay.info/ios-app-pairing-success"
+
+
 let INVALID_TOKEN = "invalid-token";
 
 let K_DEFAULTS_CONNECTION = "K_DEFAULTS_CONNECTION"
@@ -63,6 +69,9 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     }
     
     func saveLastUsedUrl(urlString: String?){
+        if (urlString?.contains("easydisplay.info") == true){
+            return
+        }
         UserDefaults.standard.set(urlString, forKey: K_DEFAULTS_LAST_USED_URL)
         UserDefaults.standard.synchronize()
     }
@@ -226,12 +235,6 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             
         }
     }
-    
-    
-    
-    let PAIRING_REQUIRED_URL = "https://www.easydisplay.info/ios-app-pairing-required"
-    
-    let PAIRING_SUCCESS_URL = "https://www.easydisplay.info/ios-app-pairing-success"
     
     
     func runMessages(messages: [Message]){
@@ -486,7 +489,7 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
                         self.alertControllerSocketError?.dismiss(animated: true, completion: nil)
                         self.alertContollerResetPairing?.dismiss(animated: true, completion: nil)
 //                        if let url = self.webView?.url , !url.absoluteString.contains("easydisplay.info") {}
-                        self.webviewLoadUrl(url: self.lastUsedUrl() ?? self.PAIRING_SUCCESS_URL)
+                        self.webviewLoadUrl(url: self.lastUsedUrl() ?? PAIRING_SUCCESS_URL)
                         
                     }
                     
