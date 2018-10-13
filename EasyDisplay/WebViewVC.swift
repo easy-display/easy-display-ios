@@ -150,12 +150,14 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             return
         }
         if (self.connection == nil){
-            let alert = UIAlertController(title: "QR Code", message: "Open Camera to scan QR Code?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            let title = "Time to pair with desktop app"
+            let message = "Please open the desktop app and use the camera to scan QR Code?"
+            let alert = UIAlertController(title: title , message:message , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Open Camera", style: .default, handler: { (action) in
                self.loadCamera()
             }))
             present(alert, animated: true) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 15.0) {
                     alert.dismiss(animated: true, completion: {
                         self.loadCamera()
                     })
