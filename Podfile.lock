@@ -1,20 +1,32 @@
 PODS:
-  - Crashlytics (3.10.2):
-    - Fabric (~> 1.7.7)
-  - Fabric (1.7.7)
+  - Crashlytics (3.10.9):
+    - Fabric (~> 1.7.13)
+  - Fabric (1.7.13)
   - GoogleAnalytics (3.17.0)
-  - SnapKit (4.0.0)
-  - Socket.IO-Client-Swift (13.2.0):
+  - GRMustache (7.3.2):
+    - JRSwizzle (~> 1.0)
+  - JRSwizzle (1.0)
+  - MarqueeLabel/Swift (3.1.6)
+  - NotificationBannerSwift (1.6.3):
+    - MarqueeLabel/Swift
+    - SnapKit (~> 4.0)
+  - ReachabilitySwift (4.3.0)
+  - SnapKit (4.0.1)
+  - Socket.IO-Client-Swift (13.3.1):
     - Starscream (~> 3.0.2)
-  - Starscream (3.0.5)
+  - Starscream (3.0.6)
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
   - Crashlytics
   - Fabric
   - GoogleAnalytics
-  - SnapKit (~> 4.0.0)
-  - Socket.IO-Client-Swift (~> 13.2.0)
+  - GRMustache (~> 7.3.2)
+  - MarqueeLabel/Swift (= 3.1.6)
+  - NotificationBannerSwift (= 1.6.3)
+  - ReachabilitySwift (~> 4.3.0)
+  - SnapKit (~> 4.0.1)
+  - Socket.IO-Client-Swift (~> 13.3.1)
   - SVProgressHUD (~> 2.2.5)
 
 SPEC REPOS:
@@ -22,20 +34,30 @@ SPEC REPOS:
     - Crashlytics
     - Fabric
     - GoogleAnalytics
+    - GRMustache
+    - JRSwizzle
+    - MarqueeLabel
+    - NotificationBannerSwift
+    - ReachabilitySwift
     - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
     - SVProgressHUD
 
 SPEC CHECKSUMS:
-  Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
-  Fabric: bda89e242bce1b7b8ab264248cf3407774ce0095
+  Crashlytics: 55e24fc23989680285a21cb1146578d9d18e432c
+  Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
   GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  Socket.IO-Client-Swift: 4698ea9eb2955eecf7fdf06c487ff1597e4cd779
-  Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
+  GRMustache: ebe6104fd30a6d22c1f36af131e19e2dbf7cd292
+  JRSwizzle: dd5ead5d913a0f29e7f558200165849f006bb1e3
+  MarqueeLabel: 0c41f08ef5773e29c0f71064a8fa788a2fd8b365
+  NotificationBannerSwift: b231e4c3244848ef300e1c53ce027b9756b9b06f
+  ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  Socket.IO-Client-Swift: 79f8f85fa44881838175a20f9bd2c32bef2c9d37
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: edc221dcff54c9c548116fc8005ce47e6c8dec91
+PODFILE CHECKSUM: f8107c1cbd2f9d86afe866a27530b939a269598a
 
 COCOAPODS: 1.5.3

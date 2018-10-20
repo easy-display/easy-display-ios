@@ -56,6 +56,8 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     }
 
+
+    
     func lastUsedUrl() -> String?{
         let str = UserDefaults.standard.string(forKey: K_DEFAULTS_LAST_USED_URL)
         return str

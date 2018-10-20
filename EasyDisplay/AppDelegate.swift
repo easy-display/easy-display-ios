@@ -9,6 +9,8 @@
 import UIKit
 import Fabric
 import Crashlytics
+import Reachability
+import NotificationBannerSwift
 
 
 @UIApplicationMain
@@ -22,7 +24,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics.self])
         setupGoogleAnaylitics()
         UIApplication.shared.isIdleTimerDisabled = true
+
+        setupReachability()
         return true
+    }
+    
+    let reachability = Reachability()
+
+
+    func setupReachability() {
+        let banner = StatusBarNotificationBanner(title: "No Internet", style: .danger)
+        reachability?.whenReachable = { reachability in
+            banner.dismiss()
+            if reachability.connection == .wifi {
+                print("Reachable via WiFi")
+            } else {
+                print("Reachable via Cellular")
+            }
+        }
+        reachability?.whenUnreachable = { _ in
+            print("Not reachable")
+            banner.show()
+        }
+        
+        do {
+            try reachability?.startNotifier()
+        } catch {
+            print("Unable to start notifier")
+        }
     }
     
     func setupGoogleAnaylitics(){

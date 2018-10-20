@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		10161C692149B75000D4C3A3 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10161C682149B75000D4C3A3 /* Platform.swift */; };
 		1024275D2110FE2200A5DF15 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024275C2110FE2200A5DF15 /* Connection.swift */; };
+		103AE9A6217B2F2100006BB9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 103AE9A5217B2F2100006BB9 /* Main.storyboard */; };
+		103AE9A8217B2F3B00006BB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 103AE9A7217B2F3A00006BB9 /* LaunchScreen.storyboard */; };
 		10898B97210F9A450045796E /* QRCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10898B96210F9A450045796E /* QRCodeVC.swift */; };
 		10898B99210FAC8E0045796E /* QRCode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10898B98210FAC8E0045796E /* QRCode.storyboard */; };
 		10D04A6220F87DA100DD63CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D04A6120F87DA100DD63CF /* AppDelegate.swift */; };
 		10D04A6420F87DA100DD63CF /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D04A6320F87DA100DD63CF /* WebViewVC.swift */; };
-		10D04A6720F87DA100DD63CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10D04A6520F87DA100DD63CF /* Main.storyboard */; };
 		10D04A6920F87DA300DD63CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10D04A6820F87DA300DD63CF /* Assets.xcassets */; };
-		10D04A6C20F87DA300DD63CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10D04A6A20F87DA300DD63CF /* LaunchScreen.storyboard */; };
 		10D04A7720F87DA400DD63CF /* EasyDisplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D04A7620F87DA400DD63CF /* EasyDisplayTests.swift */; };
 		10D04A8220F87DA400DD63CF /* EasyDisplayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D04A8120F87DA400DD63CF /* EasyDisplayUITests.swift */; };
 		7DF0D59CF3B047DDC6ED77DC /* Pods_EasyDisplay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B42F18FE805D9A4959D5EE /* Pods_EasyDisplay.framework */; };
@@ -42,14 +42,14 @@
 		10161C6421481CC500D4C3A3 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		10161C682149B75000D4C3A3 /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		1024275C2110FE2200A5DF15 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
+		103AE9A5217B2F2100006BB9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		103AE9A7217B2F3A00006BB9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		10898B96210F9A450045796E /* QRCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeVC.swift; sourceTree = "<group>"; };
 		10898B98210FAC8E0045796E /* QRCode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = QRCode.storyboard; sourceTree = "<group>"; };
 		10D04A5E20F87DA100DD63CF /* EasyDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		10D04A6120F87DA100DD63CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10D04A6320F87DA100DD63CF /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
-		10D04A6620F87DA100DD63CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		10D04A6820F87DA300DD63CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		10D04A6B20F87DA300DD63CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		10D04A6D20F87DA300DD63CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		10D04A7220F87DA400DD63CF /* EasyDisplayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EasyDisplayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		10D04A7620F87DA400DD63CF /* EasyDisplayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyDisplayTests.swift; sourceTree = "<group>"; };
@@ -91,6 +91,8 @@
 		10161C662149B74300D4C3A3 /* app */ = {
 			isa = PBXGroup;
 			children = (
+				103AE9A9217B376F00006BB9 /* views */,
+				103AE9A1217B200900006BB9 /* lib */,
 				10161C672149B74300D4C3A3 /* utility */,
 			);
 			path = app;
@@ -102,6 +104,20 @@
 				10161C682149B75000D4C3A3 /* Platform.swift */,
 			);
 			path = utility;
+			sourceTree = "<group>";
+		};
+		103AE9A1217B200900006BB9 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		103AE9A9217B376F00006BB9 /* views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = views;
 			sourceTree = "<group>";
 		};
 		10D04A5520F87DA000DD63CF = {
@@ -134,10 +150,10 @@
 				10D04A6320F87DA100DD63CF /* WebViewVC.swift */,
 				1024275C2110FE2200A5DF15 /* Connection.swift */,
 				10898B96210F9A450045796E /* QRCodeVC.swift */,
-				10D04A6520F87DA100DD63CF /* Main.storyboard */,
 				10898B98210FAC8E0045796E /* QRCode.storyboard */,
+				103AE9A5217B2F2100006BB9 /* Main.storyboard */,
+				103AE9A7217B2F3A00006BB9 /* LaunchScreen.storyboard */,
 				10D04A6820F87DA300DD63CF /* Assets.xcassets */,
-				10D04A6A20F87DA300DD63CF /* LaunchScreen.storyboard */,
 				10D04A6D20F87DA300DD63CF /* Info.plist */,
 				10161C6421481CC500D4C3A3 /* Bridging-Header.h */,
 			);
@@ -250,13 +266,16 @@
 				TargetAttributes = {
 					10D04A5D20F87DA000DD63CF = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 					};
 					10D04A7120F87DA400DD63CF = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 						TestTargetID = 10D04A5D20F87DA000DD63CF;
 					};
 					10D04A7C20F87DA400DD63CF = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 						TestTargetID = 10D04A5D20F87DA000DD63CF;
 					};
 				};
@@ -286,10 +305,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10D04A6C20F87DA300DD63CF /* LaunchScreen.storyboard in Resources */,
+				103AE9A6217B2F2100006BB9 /* Main.storyboard in Resources */,
+				103AE9A8217B2F3B00006BB9 /* LaunchScreen.storyboard in Resources */,
 				10D04A6920F87DA300DD63CF /* Assets.xcassets in Resources */,
 				10898B99210FAC8E0045796E /* QRCode.storyboard in Resources */,
-				10D04A6720F87DA100DD63CF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +349,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-EasyDisplay/Pods-EasyDisplay-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GRMustache/GRMustache.framework",
+				"${BUILT_PRODUCTS_DIR}/JRSwizzle/JRSwizzle.framework",
+				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
@@ -337,6 +361,11 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRMustache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JRSwizzle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
@@ -410,25 +439,6 @@
 			targetProxy = 10D04A7E20F87DA400DD63CF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		10D04A6520F87DA100DD63CF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				10D04A6620F87DA100DD63CF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		10D04A6A20F87DA300DD63CF /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				10D04A6B20F87DA300DD63CF /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		10D04A8420F87DA400DD63CF /* Debug */ = {
