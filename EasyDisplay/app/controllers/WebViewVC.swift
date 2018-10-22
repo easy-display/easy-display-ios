@@ -53,6 +53,10 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { (notif) in
             self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .MobileIsForeground)
         }
+        
+        
+//        let template = try GRMustacheTemplate(from: "{{name}}")
+//        let rendering = template.rend
 
     }
 
@@ -195,10 +199,12 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     func setupWebView(){
         
         let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.applicationNameForUserAgent = "EasyDisplay"
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         guard let webView = webView else {
             return
         }
+        webView.customUserAgent = "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1"
         guard let viewContainer = viewContainer else {
             return
         }
@@ -211,6 +217,9 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
             make.bottom.equalTo(viewContainer)
             make.right.equalTo(viewContainer)
         }
+        
+        
+
         
         activityIndicatorView?.isHidden = false
         webviewLoadUrl(url: PAIRING_REQUIRED_URL)
@@ -257,7 +266,11 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
                 activityIndicatorView?.isHidden = false
                 let js = msg.dataString
                 webView?.evaluateJavaScript(js, completionHandler: { (obj : Any?, error: Error? ) in
-                    print("EvaluateJS js: " , js)
+                    print("EvaluateJS js: \n\t" , js)
+                    if let str = obj as? String {
+                        print("evaluateJavaScript result: \n\n\t" , str, "\n\n")
+                        self.emitMessage(to: EVENT_MOBILE_TO_DESKTOP, name: .EvaluateJsOutput, dataString: str)
+                    }
                     if let err = error {
                         print("EvaluateJS error: " , err.localizedDescription)
                     }
@@ -518,42 +531,4 @@ class WebViewVC: UIViewController, WKUIDelegate, WKNavigationDelegate {
     }
     
 }
-
-
-
-enum MessageName: String, Codable
-{
-    case Unkown = "unknown"
-    case OpenURL = "open_url"
-    case EvaluateJS = "evaluate_js"
-    case Scroll = "scroll"
-    case Reload = "reload"
-    case MobileConnectionLost = "mobile-connection-lost"
-    case MobileConnectionSuccess = "mobile-connection-success"
-    case DesktopConnectionLost = "desktop-connection-lost"
-    case DesktopConnectionSuccess = "desktop-connection-success"
-    case MobileToBackground = "mobile-to-backgound"
-    case MobileIsForeground = "mobile-is-foreground"
-    case NewSyncRequired = "new-sync-required"
-    case ConnectionFailure = "connection-failure";
-}
-
-
-
-struct Message : Codable {
-    
-    let name: MessageName
-    let dataString: String
-    let dataNumber: Double
-    
-    init( name: MessageName, dataString: String, dataNumber: Double) {
-        self.dataString = dataString
-        self.dataNumber = dataNumber
-        self.name = name
-    }
-    
-}
-
-
-
 
