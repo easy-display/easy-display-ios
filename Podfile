@@ -11,7 +11,6 @@ target 'EasyDisplay' do
 		pod 'Fabric'
 		pod 'Crashlytics'
 		pod 'SVProgressHUD', '~> 2.2.5'
-		pod 'GRMustache', '~> 7.3.2'        
 		pod 'ReachabilitySwift', '~> 4.3.0'
 
 		pod 'NotificationBannerSwift', '1.6.3'

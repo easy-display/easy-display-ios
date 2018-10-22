@@ -14,6 +14,7 @@
 		10C822EC217B41DE00E0C47D /* QRCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C822E8217B41DE00E0C47D /* QRCodeVC.swift */; };
 		10C822ED217B41DE00E0C47D /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C822E9217B41DE00E0C47D /* WebViewVC.swift */; };
 		10C822EE217B41DE00E0C47D /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C822EB217B41DE00E0C47D /* Connection.swift */; };
+		10C822F0217D783900E0C47D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C822EF217D783900E0C47D /* Message.swift */; };
 		10D04A6220F87DA100DD63CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D04A6120F87DA100DD63CF /* AppDelegate.swift */; };
 		10D04A6920F87DA300DD63CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10D04A6820F87DA300DD63CF /* Assets.xcassets */; };
 		10D04A7720F87DA400DD63CF /* EasyDisplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D04A7620F87DA400DD63CF /* EasyDisplayTests.swift */; };
@@ -47,6 +48,7 @@
 		10C822E8217B41DE00E0C47D /* QRCodeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeVC.swift; sourceTree = "<group>"; };
 		10C822E9217B41DE00E0C47D /* WebViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
 		10C822EB217B41DE00E0C47D /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
+		10C822EF217D783900E0C47D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		10D04A5E20F87DA100DD63CF /* EasyDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		10D04A6120F87DA100DD63CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10D04A6820F87DA300DD63CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				10C822EB217B41DE00E0C47D /* Connection.swift */,
+				10C822EF217D783900E0C47D /* Message.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -365,8 +368,6 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-EasyDisplay/Pods-EasyDisplay-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GRMustache/GRMustache.framework",
-				"${BUILT_PRODUCTS_DIR}/JRSwizzle/JRSwizzle.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
@@ -377,8 +378,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRMustache.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JRSwizzle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
@@ -420,6 +419,7 @@
 				10C822ED217B41DE00E0C47D /* WebViewVC.swift in Sources */,
 				10161C692149B75000D4C3A3 /* Platform.swift in Sources */,
 				10C822EE217B41DE00E0C47D /* Connection.swift in Sources */,
+				10C822F0217D783900E0C47D /* Message.swift in Sources */,
 				10D04A6220F87DA100DD63CF /* AppDelegate.swift in Sources */,
 				10C822EC217B41DE00E0C47D /* QRCodeVC.swift in Sources */,
 			);

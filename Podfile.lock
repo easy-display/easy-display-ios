@@ -3,9 +3,6 @@ PODS:
     - Fabric (~> 1.7.13)
   - Fabric (1.7.13)
   - GoogleAnalytics (3.17.0)
-  - GRMustache (7.3.2):
-    - JRSwizzle (~> 1.0)
-  - JRSwizzle (1.0)
   - MarqueeLabel/Swift (3.1.6)
   - NotificationBannerSwift (1.6.3):
     - MarqueeLabel/Swift
@@ -21,7 +18,6 @@ DEPENDENCIES:
   - Crashlytics
   - Fabric
   - GoogleAnalytics
-  - GRMustache (~> 7.3.2)
   - MarqueeLabel/Swift (= 3.1.6)
   - NotificationBannerSwift (= 1.6.3)
   - ReachabilitySwift (~> 4.3.0)
@@ -34,8 +30,6 @@ SPEC REPOS:
     - Crashlytics
     - Fabric
     - GoogleAnalytics
-    - GRMustache
-    - JRSwizzle
     - MarqueeLabel
     - NotificationBannerSwift
     - ReachabilitySwift
@@ -48,8 +42,6 @@ SPEC CHECKSUMS:
   Crashlytics: 55e24fc23989680285a21cb1146578d9d18e432c
   Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
   GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
-  GRMustache: ebe6104fd30a6d22c1f36af131e19e2dbf7cd292
-  JRSwizzle: dd5ead5d913a0f29e7f558200165849f006bb1e3
   MarqueeLabel: 0c41f08ef5773e29c0f71064a8fa788a2fd8b365
   NotificationBannerSwift: b231e4c3244848ef300e1c53ce027b9756b9b06f
   ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
@@ -58,6 +50,6 @@ SPEC CHECKSUMS:
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: f8107c1cbd2f9d86afe866a27530b939a269598a
+PODFILE CHECKSUM: 7f0dacc445fbaf9d777aba0f23fed4122ce23964
 
 COCOAPODS: 1.5.3
